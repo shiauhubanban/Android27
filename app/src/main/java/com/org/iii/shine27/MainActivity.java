@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mesg;
+    private MyAsyncTask myTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,8 +19,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test1(View v){
-        MyAsyncTask myTask = new MyAsyncTask();
+        myTask = new MyAsyncTask();
         myTask.execute("Brad","Tony","Eric","Mary","Peter");
+    }
+    public void test2(View v){
+        if (myTask != null && !myTask.isCancelled()){
+            myTask.cancel(true);
+        }
     }
 
 
@@ -33,16 +39,20 @@ public class MainActivity extends AppCompatActivity {
         //丟資料進去
         @Override
         protected String doInBackground(String... names) {
-            int i = 0;
+            int i = 0; String ret = "OK";
             for (String name : names) {
                 Log.v("brad", "doInBackground:" + name);
                 publishProgress(i, i+10, i+100);
                 try {
                     Thread.sleep(500);
+                    if (isCancelled()){
+                        ret = "cancel";
+                        break;
+                    }
                 }catch (Exception e){}
                 i++;
             }
-            return "OK";
+            return ret;
         }
 
         @Override
@@ -60,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         @Override
-        protected void onCancelled(String aNull) {
-            super.onCancelled(aNull);
-            Log.v("brad", "onCancelled");
+        protected void onCancelled(String mesg) {
+            super.onCancelled(mesg);
+            Log.v("brad", "onCancelled:"+ mesg);
         }
 
     }
