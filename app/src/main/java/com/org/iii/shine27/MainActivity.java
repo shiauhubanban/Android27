@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class MyAsyncTask extends AsyncTask<String,Integer,Void>{
+    private class MyAsyncTask extends AsyncTask<String,Integer,String>{
         //背景就做了
         @Override
         protected void onPreExecute() {
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         }
         //丟資料進去
         @Override
-        protected Void doInBackground(String... names) {
+        protected String doInBackground(String... names) {
             int i = 0;
             for (String name : names) {
                 Log.v("brad", "doInBackground:" + name);
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 }catch (Exception e){}
                 i++;
             }
-            return null;
+            return "OK";
         }
 
         @Override
@@ -53,14 +53,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(Void aNull) {
-            super.onPostExecute(aNull);
-            Log.v("brad", "onPostExecute");
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.v("brad", "onPostExecute:" + result);
         }
 
 
         @Override
-        protected void onCancelled(Void aNull) {
+        protected void onCancelled(String aNull) {
             super.onCancelled(aNull);
             Log.v("brad", "onCancelled");
         }
